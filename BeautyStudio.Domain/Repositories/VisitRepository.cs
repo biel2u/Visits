@@ -19,7 +19,7 @@ namespace BeautyStudio.Domain.Repositories
             _context = new BeautyDbContext(settings);
         }
 
-        public async Task<IEnumerable<Visit>> GetAllVisits()
+        public async Task<List<Visit>> GetAllVisits()
         {
             var result = await _context.Visits.Find(_ => true).ToListAsync();
 
@@ -35,16 +35,18 @@ namespace BeautyStudio.Domain.Repositories
             return result;
         }
 
-        public async Task AddVisit(Visit visit)
+        public async Task<Visit> AddVisit(Visit visit)
         {
             try
             {
                 await _context.Visits.InsertOneAsync(visit);
+
+                return visit;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex; //test throw
-            }
+                return null;
+            }                  
         }
 
         public async Task<bool> DeleteVisit(int id)

@@ -1,6 +1,7 @@
 ﻿using BeautyStudio.Domain.Interfaces;
 using BeautyStudio.Domain.Models;
 using BeautyStudio.Domain.Repositories;
+using BeautyStudio.Domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,12 +28,20 @@ namespace BeautyStudio.Api
             });
 
             services.AddTransient<IVisitRepository, VisitRepository>();
+            services.AddTransient<IVisitService, VisitService>();
+
+            services.AddCors();
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors(builder => builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+            );
             app.UseMvc();
         }
     }
