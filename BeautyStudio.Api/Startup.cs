@@ -1,4 +1,5 @@
-﻿using BeautyStudio.Domain.Interfaces;
+﻿using AutoMapper;
+using BeautyStudio.Domain.Interfaces;
 using BeautyStudio.Domain.Models;
 using BeautyStudio.Domain.Repositories;
 using BeautyStudio.Domain.Services;
@@ -30,6 +31,7 @@ namespace BeautyStudio.Api
             services.AddTransient<IVisitRepository, VisitRepository>();
             services.AddTransient<IVisitService, VisitService>();
 
+            services.AddAutoMapper();
             services.AddCors();
             services.AddMvc();
         }
