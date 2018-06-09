@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace BeautyStudio.Domain.Dto
 {
@@ -28,6 +26,5 @@ namespace BeautyStudio.Domain.Dto
 
         [MaxLength(255, ErrorMessage = "Maksymalna ilość znaków wynosi 255")]
         public string Message { get; set; }
-
     }
 }

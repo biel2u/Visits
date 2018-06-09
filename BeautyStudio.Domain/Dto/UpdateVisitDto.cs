@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using MongoDB.Bson;
 
 namespace BeautyStudio.Domain.Dto
 {
-    public class EditVisitDto
+    public class UpdateVisitDto
     {
+        public ObjectId Id { get; set; }
+
         [Required(ErrorMessage = "Proszę podać imię")]
         public string Name { get; set; }
 

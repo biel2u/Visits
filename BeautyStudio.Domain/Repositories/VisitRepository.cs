@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.XPath;
 using BeautyStudio.Domain.Interfaces;
 using BeautyStudio.Domain.Models;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BeautyStudio.Domain.Repositories
@@ -22,16 +21,12 @@ namespace BeautyStudio.Domain.Repositories
         public async Task<List<Visit>> GetAllVisits()
         {
             var result = await _context.Visits.Find(_ => true).ToListAsync();
-
             return result;
         }
 
-        public async Task<Visit> GetVisitById(int id) //string?
+        public async Task<Visit> GetVisitById(string id)
         {
-            var visit = Builders<Visit>.Filter.Eq("Id", id);
-
-            var result = await _context.Visits.Find(visit).FirstOrDefaultAsync();
-
+            var result = await _context.Visits.Find(new BsonDocument {{"_id", new ObjectId(id)}}).FirstOrDefaultAsync();
             return result;
         }
 
@@ -49,17 +44,23 @@ namespace BeautyStudio.Domain.Repositories
             }                  
         }
 
-        public async Task<bool> DeleteVisit(int id)
+        public async Task<bool> DeleteVisit(string id)
         {
-            var result = await _context.Visits.DeleteOneAsync(Builders<Visit>.Filter.Eq("Id", id));
+            var result = await _context.Visits.DeleteOneAsync(new BsonDocument {{"_id", new ObjectId(id)}});
 
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
 
-        public async Task<bool> UpdateNote(Visit visit)
+        public async Task<Visit> UpdateVisit(Visit visit)
         {
-            var result = await _context.Visits.ReplaceOneAsync(v => v.Id.Equals(visit.Id), visit, new UpdateOptions {IsUpsert = true});
-            return result.IsAcknowledged && result.ModifiedCount > 0;
+            var visitToUpdate = await _context.Visits.ReplaceOneAsync(v => v.Id == visit.Id, visit, new UpdateOptions {IsUpsert = true});
+
+            if (!visitToUpdate.IsAcknowledged && visitToUpdate.ModifiedCount <= 0)
+            {
+                return null;
+            }
+
+            return visit;
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
+using MongoDB.Bson;
 
 namespace BeautyStudio.Domain.Dto
 {
     public class VisitDto
     {
-        public int Id { get; set; }
+        public ObjectId Id { get; set; }
 
         public string Name { get; set; }
 

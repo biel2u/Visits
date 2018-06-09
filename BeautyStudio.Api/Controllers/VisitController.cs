@@ -19,28 +19,79 @@ namespace BeautyStudio.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllVisits()
+        public async Task<IActionResult> GetAll()
         {
-            var result = _visitService.GetAllVisits();
+            var response = await _visitService.GetAllVisits();
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("getById/{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var response = await _visitService.GetVisitById(id);
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
         }
 
         [HttpPost]
-        public IActionResult CreateVisit([FromBody]AddVisitDto visit)
+        public async Task<IActionResult> Create([FromBody]AddVisitDto visit)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var result = _visitService.AddVisit(visit);
+            var response = await _visitService.AddVisit(visit);
 
-            if (result == null)
+            if (response == null)
             {
                 return BadRequest();
             }
 
-            return Ok(result);
+            return Ok(response);
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] string id)
+        {
+            var response = await _visitService.DeleteVisit(id);
+
+            if (response == false)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateVisitDto visit)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var response = await _visitService.UpdateVisit(visit);
+
+            if (response == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(response);
+        }
     }
 }

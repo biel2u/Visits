@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BeautyStudio.Domain.Models;
 
@@ -10,12 +8,12 @@ namespace BeautyStudio.Domain.Interfaces
     {
         Task<List<Visit>> GetAllVisits();
 
-        Task<Visit> GetVisitById(int id);
+        Task<Visit> GetVisitById(string id);
 
         Task<Visit> AddVisit(Visit visit);
 
-        Task<bool> DeleteVisit(int id);
+        Task<bool> DeleteVisit(string id);
 
-        Task<bool> UpdateNote(Visit visit);
+        Task<Visit> UpdateVisit(Visit visit);
     }
 }

@@ -7,6 +7,7 @@ namespace BeautyStudio.Domain.Models
 {
     public class Visit
     {
+        [BsonId]
         public ObjectId Id { get; set; }
 
         public string Name { get; set; }

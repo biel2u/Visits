@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using BeautyStudio.Domain.Dto;
 using BeautyStudio.Domain.Interfaces;
@@ -17,41 +18,46 @@ namespace BeautyStudio.Domain.Services
             _mapper = mapper;
         }
 
-        public List<VisitDto> GetAllVisits()
+        public async Task<List<VisitDto>> GetAllVisits()
         {
-            var visits = _visitRepository.GetAllVisits();
-            var result = _mapper.Map<List<VisitDto>>(visits);
+            var visits = await _visitRepository.GetAllVisits();
 
+            var result = _mapper.Map<List<VisitDto>>(visits);
             return result;
         }
 
-        public AddVisitDto AddVisit(AddVisitDto addVisitDto)
+        public async Task<VisitDto> GetVisitById(string id)
         {
-            var visit = new Visit
-            {
-                Name = addVisitDto.Name,
-                Surname = addVisitDto.Surname,
-                PhoneNumber = addVisitDto.PhoneNumber,
-                Email = addVisitDto.Email,
-                Treatment = addVisitDto.Treatment,
-                VisitDate = addVisitDto.VisitDate,
-                Message = addVisitDto.Message
-            };
+            var visit = await _visitRepository.GetVisitById(id);
 
-            var result = _visitRepository.AddVisit(visit);
+            var result = _mapper.Map<VisitDto>(visit);
+            return result;
+        }
 
-            var addedVisitDto = new AddVisitDto
-            {
-                Name = visit.Name,
-                Surname = visit.Surname,
-                PhoneNumber = visit.PhoneNumber,
-                Email = visit.Email,
-                Treatment = visit.Treatment,
-                VisitDate = visit.VisitDate,
-                Message = visit.Message
-            };
+        public async Task<AddVisitDto> AddVisit(AddVisitDto addVisitDto)
+        {
+            var visitToAdd = _mapper.Map<Visit>(addVisitDto);
 
-            return addedVisitDto;
+            var addedVisit = await _visitRepository.AddVisit(visitToAdd);
+
+            var result = _mapper.Map<AddVisitDto>(addedVisit);
+            return result;
+        }
+
+        public async Task<bool> DeleteVisit(string id)
+        {
+            var result = await _visitRepository.DeleteVisit(id);
+            return result;
+        }
+
+        public async Task<UpdateVisitDto> UpdateVisit(UpdateVisitDto updateVisitDto)
+        {
+            var visitToUpdate = _mapper.Map<Visit>(updateVisitDto);
+
+            var updatedVisit = await _visitRepository.UpdateVisit(visitToUpdate);
+
+            var result = _mapper.Map<UpdateVisitDto>(updatedVisit);
+            return result;
         }
     }
 }

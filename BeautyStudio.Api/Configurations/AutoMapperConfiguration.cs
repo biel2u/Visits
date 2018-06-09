@@ -19,6 +19,10 @@ namespace BeautyStudio.Api.Configurations
 
             CreateMap<Visit, VisitDto>();
             CreateMap<VisitDto, Visit>();
+
+            CreateMap<UpdateVisitDto, Visit>()
+                .ForMember(dest => dest.IsCanceled, opt => opt.Ignore());
+            CreateMap<Visit, UpdateVisitDto>();
         }
     }
 }
